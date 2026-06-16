@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mixprep"
+version = "0.1.0"
+description = "Track and organize the migration of tracking projects into mixing-optimized sessions."
+requires-python = ">=3.9"
+dependencies = [
+    "click>=8.0",
+    "PyYAML>=6.0",
+]
+
+[project.scripts]
+mixprep = "mixprep.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

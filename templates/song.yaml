@@ -1,0 +1,126 @@
+# ---------------------------------------------------------------------------
+# mix-prep song manifest template
+#
+# One of these lives at songs/<slug>/song.yaml and is the single source of
+# truth for one song. `mixprep new <slug>` copies this skeleton and fills in
+# the song block for you -- you should not normally need to copy it by hand.
+#
+# This file tracks STATE, NOT AUDIO. No audio ever lives in this repo, and
+# nothing in here is ever written back to a Logic project. Every path below
+# (source_project, mixprep_copy, exports paths, channel_strip_ref, ref) is a
+# POINTER ONLY: mix-prep reads it as text and never opens, copies, moves or
+# modifies the file it points at.
+#
+# NOTE: mix-prep rewrites this file whenever you run a command that changes
+# something. YAML comments are NOT preserved on rewrite, so put explanations
+# in `notes` entries (which are preserved), not in comments.
+# ---------------------------------------------------------------------------
+
+schema_version: 1                # manifest schema version. Do not edit by hand.
+                                 # The CLI stamps this and refuses to read a
+                                 # manifest newer than it understands.
+
+song:
+  title: ""                      # human-readable song title, e.g. "Ocean Floor"
+  slug: ""                       # filesystem-safe id, [A-Za-z0-9_-]+.
+                                 # Must equal the songs/<slug>/ directory name.
+  source_project: ""             # absolute path to the ORIGINAL Logic project.
+                                 # Read-only metadata. NEVER touched, ever.
+  mixprep_copy: ""               # absolute path to the working copy -- the only
+                                 # project you ever open. Must NOT equal, and must
+                                 # not live inside, source_project (safety rule C-9).
+  mix_daw: logic                 # ableton | logic   -- where you will mix this song
+  sample_rate: 48000             # Hz, e.g. 44100 | 48000 | 96000
+  tempo: 120                     # BPM, any number > 0
+
+export:                          # song-level export controls
+  realtime: auto                 # auto | force | off
+                                 #   auto  = derive from each track's hardware.type
+                                 #   force = treat every pass as real-time
+                                 #   off   = never advise real-time (offline only)
+                                 # `mixprep status` turns this into the
+                                 # "Export mode:" banner you read before bouncing.
+  hardware_returns: ""           # free text: outboard gear on a bus/return that is
+                                 # not itself a track, e.g. "plate reverb on Bus 5".
+                                 # Non-empty means the WET pass needs real time.
+
+workflow:                        # ordered pipeline flags. Order is advisory: checking
+                                 # one out of order warns, it never blocks you.
+  copy_made: false               # 1. safe copy made, original locked in Finder
+  tracks_inventoried: false      # 2. every track is in `tracks` below
+  renamed_in_daw: false          # 3. tracks renamed in the COPY to match new_name
+  exported_dry: false            # 4. dry stems bounced (effects bypassed)
+  exported_wet: false            # 5. wet stems bounced (tracking effects intact)
+  imported_to_mix: false         # 6. stems imported into the mix project
+  mixing_started: false          # 7. mixing under way, keep/cut decisions landing
+
+notes: []                        # song-level timestamped notes, newest appended last.
+                                 # Add with: mixprep note <slug> --text "..."
+                                 # Each entry looks like:
+                                 #   - ts: "2026-06-16T10:02:00"     # ISO-8601, set by the CLI
+                                 #     text: "Verse 2 has a doubled vocal to resolve."
+                                 #     edited: "2026-06-17T09:00:00" # optional, only if edited
+
+tracks: []                       # every track, bus and aux for this song.
+                                 # Add with: pbpaste | mixprep add <slug> --bulk
+
+# ---------------------------------------------------------------------------
+# EXAMPLE TRACK -- fully populated, showing every optional field.
+# Commented out on purpose: this is reference, not data. Delete it, or copy it
+# under `tracks:` and edit, but prefer letting the CLI write these fields
+# (`mixprep add`, `suggest`, `renumber`, `set`, `fx`, `note`).
+# ---------------------------------------------------------------------------
+#
+# tracks:
+#   - id: 21                            # stable, unique, NEVER reused -- even after a
+#                                       # track is deleted. This is NOT the NN in the
+#                                       # name; renumber never touches it.
+#     original_name: "Vox Lead comp"    # exactly as it appeared in the tracking session
+#     new_name: "21_VOX_Lead"           # NN_CAT_Descriptor[_Variant] (see docs/naming-convention.md)
+#     category: VOX                     # DR | PRC | BS | GTR | KEY | SYN | VOX | BV | FX | MISC
+#     track_kind: audio                 # audio | instrument | bus | aux
+#     group: "LeadVox"                  # optional label linking alternative layers or a
+#                                       # stereo pair (the _L and _R halves share a group)
+#     decision: keep                    # keep | cut | undecided
+#     hardware:
+#       type: insert                    # none | insert | external_instrument | sidechain | send
+#                                       # insert -> DRY can bounce offline, WET must be real time
+#       io: "out 5/6 -> Distressor -> in 5/6"   # free-text routing note, or null
+#     exports:
+#       dry:
+#         status: done                  # pending | done | n/a
+#                                       # use n/a when a dry stem is meaningless, e.g. an
+#                                       # external hardware instrument
+#         path: "/Volumes/Music/Exports/OceanFloor/DRY/21_VOX_Lead.wav"   # or null
+#       wet:
+#         status: pending               # pending | done | n/a
+#         path: null                    # filled in when the stem exists
+#     channel_strip_ref: "/Volumes/Music/MixPrep/presets/OceanFloor_LeadVox.cst"
+#                                       # pointer to a Logic Channel Strip Setting that
+#                                       # recalls the whole chain. Pointer only, or null.
+#     effects_chain:                    # ORDERED: list order == signal chain order
+#       - plugin: "Channel EQ"          # required
+#         maker: "Logic"                # optional -- matters when rebuilding in Ableton
+#         settings: "HPF 90Hz, -3dB @ 350, +4dB @ 10k"   # optional free text
+#       - plugin: "Pro-C 2"
+#         maker: "FabFilter"
+#         preset: "Vocal Smooth"        # optional preset name
+#         bypassed: false               # optional, default false
+#         settings: "gentle leveling, ~3dB GR"
+#         params:                       # optional structured values, units kept as text
+#           Ratio: "3:1"
+#           Threshold: "-22 dB"
+#           Attack: "8 ms"
+#         ref: "/Volumes/Music/MixPrep/presets/leadvox_proc2.aupreset"   # pointer only
+#       - plugin: "Distressor"
+#         maker: "Empirical Labs (hardware)"
+#         settings: "Dist 3, ~4-6dB GR -- OUTBOARD insert, see hardware.io"
+#         ref: "/Volumes/Music/MixPrep/presets/leadvox_distressor.jpg"
+#     source:                           # provenance of the recording; any field may be null
+#       mic: "Beta 91A"
+#       performer: "Sam"
+#       recorded: "2026-05-30"
+#       takes: 3
+#     notes:
+#       - ts: "2026-06-16T10:05:00"
+#         text: "Best take is a comp of 1 and 3."

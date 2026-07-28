@@ -87,7 +87,6 @@ The `mixprep` CLI and YAML manifests defined in this document. The human runs co
   - **Hard safety:** the command must positively confirm Logic's open project resolves to `song.mixprep_copy` and abort otherwise — never act against the source (C-1/C-2/C-9). Requires macOS Screen-Recording + Accessibility consent.
   - **Verdict:** complements, never replaces, the Phase 1 manual settings log (which stays the DAW-independent, searchable, git-friendly source of truth). No Phase-1 hooks needed beyond the `ref`/`channel_strip_ref` fields already present; an optional per-plugin `slot` index (Section 13) would make shot↔chain mapping explicit.
 - **Logic automation limits noted.** Logic project files are not a documented open format; Logic automation is limited to **UI scripting** (e.g. AppleScript / accessibility) and is explicitly out of scope for reliable parsing.
-- **Logic automation limits noted.** Logic project files are not a documented open format; Logic automation is limited to **UI scripting** (e.g. AppleScript / accessibility) and is explicitly out of scope for reliable parsing.
 
 ### Phase 3 — Mix Template Generation + LLM Harness
 

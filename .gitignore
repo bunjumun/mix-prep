@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# macOS
+.DS_Store
+
+# mix-prep tracks state, not audio. Never commit stems, projects, or assets.
+*.wav
+*.aif
+*.aiff
+*.mp3
+*.m4a
+*.logicx/
+*.als
+*.cst
+*.aupreset
+Exports/

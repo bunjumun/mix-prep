@@ -1,9 +1,11 @@
 # mix-prep (`mixprep`) — Specification Sheet
 
 > Document: `docs/SPEC.md`
-> Status: Accepted — Phase 1 scope approved for build
-> Version: 0.2.0
-> Last updated: 2026-06-16
+> Status: Phase 1 built, tested, and accepted
+> Version: 0.2.1
+> Last updated: 2026-08-14
+
+> **Changelog (0.2.1):** Phase 1 built and accepted. Revised the Logic-parsing position after verifying against a real `.logicx`: `MetaData.plist` is parseable, track names are recoverable from `ProjectData`, and `WindowImage.jpg` is a free visual record — so Logic auto-inventory is assisted-but-feasible rather than out of scope. `set` gained an explicit `song` scope for song-level fields.
 
 > **Changelog (0.2.0):** Folded in multi-agent review outcomes — added `schema_version`, `track_kind`, `group`, an `exports` sub-object (status + stem path), hardware/real-time export awareness, a richer plugin-settings log, a JSON output envelope, a global `--dry-run`, and a `source ≠ copy` safety guard. Replaced the interactive `edit` command with `path`. Replaced the undefined `validate --strict` mode with a structural-error vs style-warning exit-code split. `set` now accepts dotted paths.
 
@@ -86,7 +88,12 @@ The `mixprep` CLI and YAML manifests defined in this document. The human runs co
   - **Layout:** `Exports/<song>/PluginShots/<new_name>/NN_<plugin>.{png,aupreset}` + `00_ChannelStrip.cst`, mirroring the export tree; NN = effects-chain list index.
   - **Hard safety:** the command must positively confirm Logic's open project resolves to `song.mixprep_copy` and abort otherwise — never act against the source (C-1/C-2/C-9). Requires macOS Screen-Recording + Accessibility consent.
   - **Verdict:** complements, never replaces, the Phase 1 manual settings log (which stays the DAW-independent, searchable, git-friendly source of truth). No Phase-1 hooks needed beyond the `ref`/`channel_strip_ref` fields already present; an optional per-plugin `slot` index (Section 13) would make shot↔chain mapping explicit.
-- **Logic automation limits noted.** Logic project files are not a documented open format; Logic automation is limited to **UI scripting** (e.g. AppleScript / accessibility) and is explicitly out of scope for reliable parsing.
+- **Logic `.logicx` inspection (revised 2026-08, verified against a real project).** Logic's format is undocumented, but the package is **not** opaque, and auto-inventory for Logic is no longer out of scope:
+  - `Alternatives/000/MetaData.plist` is a **plain, parseable plist** giving `NumberOfTracks`, `SampleRate`, `BeatsPerMinute`, time signature, key, and the full `AudioFiles` list. This populates `song.sample_rate`, `song.tempo` and a track-count cross-check with **zero UI scripting** — read-only, on the copy.
+  - `Alternatives/000/ProjectData` is undocumented binary, but user track names survive in it as **plain strings** (verified: `Instrumental`, `Main Vocals`, `demo background vocals`, alongside plugin and audio-file names). Order and track↔name association are **not** recoverable this way, so this supports an **assisted** inventory — propose candidates, human confirms — never a silent auto-import.
+  - `Alternatives/000/WindowImage.jpg` is a **full window snapshot Logic writes on every save**, showing the arrange page and any open channel strips with their plugin names. It is a free, zero-permission visual record that needs none of the `mixprep shots` UI-scripting machinery, and should be the first artifact `shots` collects.
+  - Everything above is **read-only inspection of a copy**; it does not weaken C-1/C-2. Writing back into a `.logicx` remains out of scope.
+- **Logic automation limits noted.** *Writing* to Logic projects, and driving Logic's UI, remain limited to **UI scripting** (AppleScript / accessibility) and are out of scope for reliable automation.
 
 ### Phase 3 — Mix Template Generation + LLM Harness
 
@@ -431,7 +438,7 @@ Phase 1 is accepted when:
 - **Mix template structure (Phase 3).** Exact bus/group topology, naming of category buses, default routing/sends, and whether to ship Ableton-only first or both DAWs. How closely should template groups mirror the 10 category codes vs. a coarser bus set?
 - **Pro Tools (and other DAWs) support.** Should the model later support Pro Tools / other DAWs as tracking or mix targets? Current enum is `ableton | logic` only. (Treat unknown `mix_daw` values as unsupported, not crashing.)
 - **Local-LLM choice for the harness (Phase 3).** Which local model (and runtime) to support alongside Claude, and how the harness authenticates / sandboxes filesystem access while respecting C-1/C-2.
-- **Logic project parsing.** Logic's project format is not openly documented; auto-inventory/verify for Logic may be limited to UI scripting. Is UI scripting acceptable, or is Ableton-only auto-parsing sufficient for Phase 2?
+- **Logic project parsing — largely resolved (2026-08).** Verified against a real 10.8.1 project: `MetaData.plist` parses cleanly, `ProjectData` yields track names by string scan, and `WindowImage.jpg` is a free visual record (see Phase 2). Remaining open: how stable the `ProjectData` string layout is across Logic versions and project sizes, and whether track↔name **ordering** can be recovered well enough to auto-map names to channel strips (today it cannot, so inventory stays human-confirmed).
 - **Stem-to-track matching.** For export-folder watching (Phase 2), how strictly must exported filenames match `new_name`, and how to handle multi-file (e.g. `_L`/`_R`) or grouped exports. (The `exports.<dir>.path` field captured in Phase 1 is the anchor.)
 - **Effects-chain `slot` numbers.** Phase 1 uses list order as the chain order. Revisit whether explicit insert-slot numbers (incl. empty slots) are needed for hardware-mixer recall.
 - **Plugin-settings capture (`mixprep shots`) — design largely settled (see Phase 2 roadmap), open items remain:** the precise UI-scripting recipe per Logic version, whether to ship native-format capture (`.cst`/`.aupreset`) as fully manual-with-pointer-recording vs. menu-driven first, and whether to add the optional per-plugin `slot` index to make shot↔chain mapping explicit rather than positional.

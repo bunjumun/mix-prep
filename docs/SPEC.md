@@ -68,7 +68,7 @@ Both personas share the **same CLI and the same manifests.** The agent does not 
 
 | Phase | Name | Scope | Status |
 |---|---|---|---|
-| **1** | Organization system | The `mixprep` CLI + per-song YAML manifests. Pure state tracking; no automation of the DAW or filesystem. | **Build now** |
+| **1** | Organization system | The `mixprep` CLI + per-song YAML manifests. Pure state tracking; no automation of the DAW or filesystem. | **Built** |
 | **2** | Automation | Scripted safe copies + watching for export status. | Planned |
 | **3** | Mix template + LLM harness | Generate the mix template and let an agent drive migration. | Planned |
 

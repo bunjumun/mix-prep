@@ -1,0 +1,187 @@
+schema_version: 1
+song:
+  title: Mango Tree World (Claude Test)
+  slug: mtw-claude-test
+  source_project: /Volumes/Music/Logic/MTW CLAUDE TEST.logicx
+  mixprep_copy: /Volumes/Music/MixPrep/MTW CLAUDE TEST.logicx
+  mix_daw: ableton
+  sample_rate: 44100
+  tempo: 137
+export:
+  realtime: auto
+  hardware_returns: ''
+workflow:
+  copy_made: false
+  tracks_inventoried: false
+  renamed_in_daw: false
+  exported_dry: false
+  exported_wet: false
+  imported_to_mix: false
+  mixing_started: false
+notes:
+- ts: '2026-08-14T22:56:38'
+  text: 'Bus 8 -> Aux 3 (UADx Hitsville EQ) -> Stereo Out is a PARALLEL return. Captured as track 6 (track_kind:
+    aux). UADx is native, so no real-time bounce needed.'
+tracks:
+- id: 1
+  original_name: Instrumental
+  new_name: 06_MISC_Instrumental
+  category: MISC
+  track_kind: audio
+  group: null
+  decision: keep
+  hardware:
+    type: none
+    io: null
+  exports:
+    dry:
+      status: pending
+      path: null
+    wet:
+      status: pending
+      path: null
+  channel_strip_ref: null
+  effects_chain: []
+  source:
+    mic: null
+    performer: null
+    recorded: null
+    takes: null
+  notes: []
+- id: 2
+  original_name: Main Vocals
+  new_name: 01_VOX_MainVocals
+  category: VOX
+  track_kind: audio
+  group: null
+  decision: keep
+  hardware:
+    type: none
+    io: null
+  exports:
+    dry:
+      status: pending
+      path: null
+    wet:
+      status: pending
+      path: null
+  channel_strip_ref: null
+  effects_chain: []
+  source:
+    mic: null
+    performer: null
+    recorded: null
+    takes: null
+  notes: []
+- id: 3
+  original_name: demo background vocals
+  new_name: 02_BV_DemoBackgroundVocals
+  category: BV
+  track_kind: audio
+  group: BGVs
+  decision: keep
+  hardware:
+    type: none
+    io: null
+  exports:
+    dry:
+      status: pending
+      path: null
+    wet:
+      status: pending
+      path: null
+  channel_strip_ref: null
+  effects_chain:
+  - plugin: UADx LA-2A
+    maker: Universal Audio
+    preset: Default
+    settings: leveling amp on the BGV bus
+    params:
+      Peak_Reduction: not read from window image
+      Gain: not read
+  source:
+    mic: null
+    performer: null
+    recorded: null
+    takes: null
+  notes: []
+- id: 4
+  original_name: Mango Tree World less bgs 7-12
+  new_name: 03_BV_MangoTreeWorldLessBgs712
+  category: BV
+  track_kind: audio
+  group: BGVs
+  decision: cut
+  hardware:
+    type: none
+    io: null
+  exports:
+    dry:
+      status: pending
+      path: null
+    wet:
+      status: pending
+      path: null
+  channel_strip_ref: null
+  effects_chain: []
+  source:
+    mic: null
+    performer: null
+    recorded: null
+    takes: null
+  notes:
+  - ts: '2026-08-14T22:56:09'
+    text: '''less bgs'' is an alternate of the bgs stack - cut unless the full stack is too dense'
+- id: 5
+  original_name: Mango Tree World bgs 7-12
+  new_name: 04_BV_MangoTreeWorldBgs712
+  category: BV
+  track_kind: audio
+  group: BGVs
+  decision: keep
+  hardware:
+    type: none
+    io: null
+  exports:
+    dry:
+      status: pending
+      path: null
+    wet:
+      status: pending
+      path: null
+  channel_strip_ref: null
+  effects_chain: []
+  source:
+    mic: null
+    performer: null
+    recorded: null
+    takes: null
+  notes: []
+- id: 6
+  original_name: Aux 3 - Hitsville return
+  new_name: 05_FX_Aux3HitsvilleReturn
+  category: FX
+  track_kind: aux
+  group: HitsvilleReturn
+  decision: undecided
+  hardware:
+    type: none
+    io: null
+  exports:
+    dry:
+      status: pending
+      path: null
+    wet:
+      status: pending
+      path: null
+  channel_strip_ref: null
+  effects_chain:
+  - plugin: UADx Hitsville EQ
+    maker: Universal Audio
+    settings: parallel return via Bus 8
+  source:
+    mic: null
+    performer: null
+    recorded: null
+    takes: null
+  notes: []

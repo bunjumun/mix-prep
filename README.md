@@ -240,11 +240,20 @@ mixprep set ocean-floor 19 hardware.type=external_instrument
 mixprep set ocean-floor 19 exports.dry.status=n/a
 ```
 
-If you know the whole song has to bounce in real time regardless of what the tracks say, set the song-level `export.realtime` to `force` (or `off` to suppress the advice entirely). That is a song field rather than a track field, so edit it in the manifest:
+If you know the whole song has to bounce in real time regardless of what the tracks say, set the song-level `export.realtime` to `force` (or `off` to suppress the advice entirely). Song-level fields are edited with the literal word `song` in place of a track:
 
 ```bash
-$EDITOR "$(mixprep path ocean-floor)"     # export: → realtime: force
+mixprep set ocean-floor song export.realtime=force
+mixprep set ocean-floor song song.tempo=92 song.mix_daw=logic
 ```
+
+If you have parallel hardware on a bus or return — outboard that isn't a track and so can't carry a `hardware.type` of its own — record it in `export.hardware_returns`, which forces the WET pass to real time:
+
+```bash
+mixprep set ocean-floor song export.hardware_returns="Bus 8 -> Distressor -> Bus 9"
+```
+
+Keep that field for genuine *hardware*. A parallel chain built from native plugins needs no real-time pass; model it as a track with `track_kind: aux` and its own `effects_chain` instead.
 
 ### Step 9 — The DRY export
 

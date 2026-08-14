@@ -33,6 +33,13 @@ KEYWORD_TABLE = (
     ("drum kit", "DR"),
     # --- backing vocals BEFORE lead vocals
     ("bgv", "BV"),
+    ("bgvs", "BV"),
+    ("bgs", "BV"),
+    ("bg vox", "BV"),
+    ("bg vocal", "BV"),
+    ("background vox", "BV"),
+    ("background vocal", "BV"),
+    ("background", "BV"),
     ("backing vox", "BV"),
     ("backing vocal", "BV"),
     ("backing", "BV"),
@@ -145,6 +152,12 @@ KEYWORD_TABLE = (
     ("sfx", "FX"),
     ("fx", "FX"),
     ("noise", "FX"),
+    # send/return busses read as effects: they carry processing, not a performance
+    ("reverb", "FX"),
+    ("verb", "FX"),
+    ("delay", "FX"),
+    ("slap", "FX"),
+    ("return", "FX"),
     # --- misc
     ("click", "MISC"),
     ("talkback", "MISC"),
